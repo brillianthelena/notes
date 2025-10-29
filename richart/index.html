@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Richart Invest+ 專案簡報</title>
+    <style>
+        /* --- 基本重設與字體 --- */
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            /* 關鍵：設定滾動吸附效果 */
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        /* --- 投影片基礎樣式 --- */
+        section {
+            width: 100vw;
+            height: 100vh;
+            /* 關鍵：讓每一屏都成為吸附點 */
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            
+            box-sizing: border-box; /* 確保 padding 不會撐爆 100vh */
+            padding: 4vw 6vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- 投影片版型 --- */
+
+        /* 1. 封面頁 / 章節頁 (深色底) */
+        .slide-title {
+            background-color: #82269E; /* Richart 紫色 */
+            color: white;
+            text-align: center;
+        }
+        .slide-title h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .slide-title h2 {
+            font-size: 2rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        .slide-title p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-top: 2rem;
+        }
+
+        /* 2. 內容頁 (淺色底) */
+        .slide-content {
+            background-color: #ffffff;
+            justify-content: flex-start; /* 內容從上方開始 */
+            padding-top: 6rem; /* 留出標題空間 */
+        }
+        
+        /* 3. 洞察頁 (綠色底) */
+        .slide-insight {
+            background-color: #00A89D; /* Richart 綠色 */
+            color: white;
+            text-align: center;
+        }
+
+        /* --- 標題與文字元素 --- */
+        h1, h2, h3, h4, p, ul, li {
+            margin: 0 0 1rem 0;
+        }
+
+        /* 內容頁的主標題 */
+        .slide-content > h2 {
+            font-size: 2.2rem;
+            color: #82269E;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #f0f2f5;
+            margin-bottom: 2rem;
+            position: absolute;
+            top: 4rem;
+            left: 6vw;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: #333;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p, li {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 2rem;
+        }
+        
+        ul ul {
+            list-style-type: circle;
+            margin-top: 0.5rem;
+        }
+
+        b, strong {
+            color: #82269E; /* 強調文字 */
+        }
+
+        /* --- 佈局工具 --- */
+        .columns {
+            display: flex;
+            flex-direction: row;
+            gap: 2.5rem; /* 欄位間距 */
+            width: 100%;
+            height: 100%;
+        }
+        
+        .col {
+            flex: 1; /* 均分寬度 */
+        }
+        
+        /* --- 特殊元素 --- */
+        blockquote {
+            font-size: 1.8rem;
+            font-weight: 500;
+            font-style: italic;
+            border-left: 6px solid white;
+            padding-left: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        /* 頁尾 */
+        .footer {
+            position: absolute;
+            bottom: 2rem;
+            left: 6vw;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .slide-title .footer, .slide-insight .footer {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <section class="slide-title">
+        <h1>Richart Invest+</h1>
+        <h2>專為Z世代打造的遊戲化投資啟蒙平台</h2>
+        <p>大學服務設計課程「台新Richart」專案小組</p>
+    </section>
+
+    <section class="slide-content">
+        <h2>簡報議程 (Agenda)</h2>
+        <div class="columns">
+            <div class="col">
+                <h3 style="color: #82269E; font-size: 2rem; margin-top: 2rem;">Part 1: 前期研究</h3>
+                <p style="font-size: 1.5rem;">Discovery & Research</p>
+            </div>
+            <div class="col">
+                <h3 style="color: #82269E; font-size: 2rem; margin-top: 2rem;">Part 2: 概念設計</h3>
+                <p style="font-size: 1.5rem;">Concept Design</p>
+            </div>
+            <div class="col">
+                <h3 style="color: #82269E; font-size: 2rem; margin-top: 2rem;">Part 3: 後測驗證</h3>
+                <p style="font-size: 1.5rem;">Validation & Testing</p>
+            </div>
+        </div>
+        <div class="footer">Richart Invest+ 專案企劃</div>
+    </section>
+
+    <section class="slide-title">
+        <h1>Part 1</h1>
+        <h2>前期研究 (Discovery & Research)</h2>
+    </section>
+
+    <section class="slide-content">
+        <h2>1.1 目標定義 & 1.2 市場分析</h2>
+        <div class="columns">
+            <div class="col">
+                <h3>核心問題：Z世代的投資障礙</h3>
+                <ul>
+                    <li><b>恐懼感：</b>「怕賠錢、怕血本無歸。」</li>
+                    <li><b>知識壁壘：</b>「專有名詞太多，ETF, 基金, 股票... 搞不懂。」</li>
+                    <li><b>選擇困難：</b>「APP打開，上百種商品，不知從何開始。」</li>
+                </ul>
+                <h3>專案目標</h3>
+                <p>以Richart為基礎，設計一套能<b>降低心理門檻</b>、<b>引導踏出第一步</b>的創新金融服務。</p>
+            </div>
+            <div class="col">
+                <h3>市場趨勢</h3>
+                <ul>
+                    <li><b>微型投資 (Micro-investing):</b> 小額、零錢投資降低門檻 (Acorns)。</li>
+                    <li><b>遊戲化金融 (Gamification):</b> 用成就、徽章、進度條提升黏著度。</li>
+                    <li><b>主題式投資 (Thematic):</b> 依興趣投資，而非代碼 (Stash)。</li>
+                </ul>
+                <h3>競品分析</h3>
+                <ul>
+                    <li><b>國外：</b>Robinhood, Acorns, Stash</li>
+                    <li><b>國內：</b>國泰證券、口袋證券、永豐大戶投</li>
+                    <li><b>分析重點：</b>它們用什麼介面、文案與功能來吸引年輕人？</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer">Part 1: 前期研究</div>
+    </section>
+
+    <section class="slide-content">
+        <h2>1.3 目標客群深度訪談</h2>
+        <h3>訪談對象</h3>
+        <p>18-25歲，有在使用Richart (轉帳/儲蓄) 但<b>從未投資過</b>的大學生或社會新鮮人。</p>
+        
+        <h3>訪談大綱 (重點)</h3>
+        <ul>
+            <li>你對「投資理財」的第一印象是什麼？為什麼遲遲沒有開始？</li>
+            <li>你通常從哪裡獲得金融資訊？（Dcard 理財版、YouTube 頻道、IG 知識型帳號？）</li>
+            <li>你信任 AI 或演算法給你的投資建議嗎？為什麼？</li>
+            <li>什麼樣的情境或工具，可能會讓你願意「試試看」投資？（例如：獎勵、社群、保證獲利？）</li>
+        </ul>
+        <div class="footer">Part 1: 前期研究</div>
+    </section>
+
+    <section class="slide-insight">
+        <h2 style="color: white; border-bottom: 3px solid rgba(255,255,255,0.5);">1.4 洞察與機會點</h2>
+        
+        <h3>核心洞察 (Insight)</h3>
+        <blockquote>
+            「年輕人不怕花錢（購物/娛樂），但怕<b>『笨拙地』</b>賠錢。<br>
+            他們需要的不是『高報酬』，而是一個低風險、有引導、且能帶來<b>『成就感』</b>的學習環境。」
+        </blockquote>
+        
+        <h3>定義機會點 (Opportunity)</h3>
+        <p style="font-size: 1.5rem; font-weight: 500;">
+            「打造一個 Richart 內建的<b>『投資新手村』</b>」<br>
+            透過遊戲化與社群元素，將複雜的投資行為轉化為有趣、有回饋的闖關體驗。
+        </p>
+        <div class="footer">Part 1: 前期研究</div>
+    </section>
+
+    <section class="slide-title">
+        <h1>Part 2</h1>
+        <h2>概念設計 (Concept Design)</h2>
+    </section>
+
+    <section class="slide-content">
+        <h2>2.1 價值主張 (Value Proposition)</h2>
+        
+        <h3 style="margin-top: 2rem;">核心價值</h3>
+        <p style="font-size: 1.8rem; font-weight: 500; color: #82269E;">
+            「Richart Invest+：你的第一堂投資課，從這裡輕鬆畢業。」
+        </p>
+
+        <h3>設計宣言</h3>
+        <p style="font-size: 1.3rem; line-height: 1.8;">
+            我們相信投資不該是充滿恐懼的考試，而是一場有趣的探索。<br>
+            我們陪伴你從 <b>$100</b> 元開始，用一杯咖啡的錢，建立屬於你的財富地圖。
+        </p>
+        <div class="footer">Part 2: 概念設計</div>
+    </section>
+
+    <section class="slide-content">
+        <h2>2.2 遊戲化服務流程 (1/2)</h2>
+        <div class="columns">
+            <div class="col">
+                <h3>1. 風險屬性探索 (新手村任務)</h3>
+                <p><b>拋棄傳統問卷：</b>用生動的情境問答取代。</p>
+                <ul>
+                    <li><i>"Q: 你撿到1000元會怎麼做？"</i><br>
+                        (A) 馬上存起來 (B) 吃一頓大餐 (C) 拿去買彩券</li>
+                    <li><b>生成「投資人格」：</b>
+                        <ul>
+                            <li>保守型史萊姆</li>
+                            <li>穩健型哥布林</li>
+                            <li>積極型獨角獸</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="col">
+                <h3>2. AI 智慧推薦 (裝備商店)</h3>
+                <p><b>拒絕選擇困難：</b>根據「投資人格」，AI推薦3-5個「投資組合包」。</p>
+                <ul>
+                    <li><b>範例組合包：</b>
+                        <ul>
+                            <li>「永續能源ETF包」 (SRI)</li>
+                            <li>「全球科技巨頭包」 (Apple, Google...)</li>
+                            <li>「抗通膨民生包」</li>
+                        </ul>
+                    </li>
+                    <li>使用簡單語言和視覺化圖表呈現。</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer">Part 2: 概念設計</div>
+    </section>
+
+    <section class="slide-content">
+        <h2>2.2 遊戲化服務流程 (2/2)</h2>
+        <div class="columns">
+            <div class="col">
+                <h3>3. 定期定額 (自動練功)</h3>
+                <ul>
+                    <li>引導用戶設定每月 $1000 元起的定期定額。</li>
+                    <li><b>視覺化反饋：</b>將扣款行為視覺化為「角色自動打怪」、「經驗值(EXP)累積」。</li>
+                    <li>降低用戶對「錢被扣走」的焦慮感，轉化為「看著角色成長」的期待感。</li>
+                </ul>
+            </div>
+            <div class="col">
+                <h3>4. 學習與成就系統 (技能樹)</h3>
+                <ul>
+                    <li><b>觸發條件：</b>
+                        <ul>
+                            <li>完成金融知識小測驗</li>
+                            <li>持續扣款達 3 個月</li>
+                            <li>首次獲利 / 經歷首次虧損 (鼓勵持續)</li>
+                        </ul>
+             
