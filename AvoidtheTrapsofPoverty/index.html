@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avoid the Traps of Poverty! | A Ben Franklin Adventure</title>
+  <style>
+    /* =====================================================
+       GLOBAL
+    ====================================================== */
+    :root {
+      --bg-color: #2c1e1a;
+      --paper-light: #fffcf5;
+      --paper-dark: #f0e6d2;
+      --primary: #5d4037;
+      --accent-gold: #ffc107;
+      --accent-green: #4caf50;
+      --accent-red: #f44336;
+      --accent-blue: #2196f3;
+      --text-main: #3e2723;
+      --font-main: Garamond, "EB Garamond", "Garamond Premier Pro", serif;
+      --hud-height: 90px; /* CHANGED */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow: hidden; /* we'll scroll inside #main-stage */
+    }
+
+    /* =====================================================
+       FULL-PAGE STAGE (Removed wooden frame)
+    ====================================================== */
+    #game-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+    }
+
+    /* =====================================================
+       HUD
+    ====================================================== */
+    #hud {
+      background: rgba(240, 230, 210, 0.98);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid rgba(93, 64, 55, 0.55);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(6px);
+    }
+
+    .stat-group {
+      display: flex;
+      gap: 12px;
+      flex: 1;
+      max-width: 900px;
+      align-items: center;
+    }
+
+    .stat-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 120px;
+    }
+
+    .stat-label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      letter-spacing: 0.2px;
+    }
+
+    .progress-track {
+      background: #d7ccc8;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 50%;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hud-right {
+      font-weight: 700;
+      color: var(--primary);
+      margin-left: 14px;
+      white-space: nowrap;
+      font-size: 1rem;
+    }
+
+    /* =====================================================
+       MAIN STAGE (Scroll container)
+    ====================================================== */
+    #main-stage {
+      flex: 1;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(255,252,245,0.14), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.12));
+    }
+
+    /* =====================================================
+       HERO SCENE
+    ====================================================== */
+    .scene-header { /* CHANGED */
+      position: absolute; /* CHANGED */
+      inset: 0; /* CHANGED */
+      overflow: hidden; /* CHANGED */
+      background: #1f1512;
+    } /* CHANGED */
+
+    .scene-bg { /* CHANGED */
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 68% 22%;
+      transform: scale(1.06); /* CHANGED */
+    } /* CHANGED */
+
+    .chapter-title-badge { /* CHANGED */
+      position: absolute;
+      left: 18px; /* CHANGED */
+      top: 18px; /* CHANGED */
+      transform: none; /* CHANGED */
+      padding: 10px 18px;
+      border-radius: 16px; /* CHANGED */
+      background: rgba(10, 6, 4, 0.65); /* CHANGED */
+      color: #f5e6c8;
+      font-weight: 700;
+      font-size: 1.05rem; /* CHANGED */
+      letter-spacing: 0.2px; /* CHANGED */
+      backdrop-filter: blur(8px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35); /* CHANGED */
+      z-index: 5; /* CHANGED */
+      text-align: left; /* CHANGED */
+      max-width: 80%; /* CHANGED */
+    } /* CHANGED */
+
+    /* =====================================================
+       STORY
+    ====================================================== */
+    .story-container { /* CHANGED */
+      position: absolute; /* CHANGED */
+      left: 24px; /* CHANGED */
+      bottom: 24px; /* CHANGED */
+      max-width: min(480px, 78%); /* CHANGED */
+      background: rgba(255, 252, 245, 0.94); /* CHANGED */
+      color: var(--text-main); /* CHANGED */
+      padding: 18px 20px; /* CHANGED */
+      border-radius: 22px 22px 22px 8px; /* CHANGED */
+      box-shadow: 0 18px 36px rgba(0,0,0,0.45); /* CHANGED */
+      border: 1px solid rgba(93, 64, 55, 0.25); /* CHANGED */
+      backdrop-filter: blur(6px); /* CHANGED */
+      z-index: 6; /* CHANGED */
+    } /* CHANGED */
+
+    .story-container::after { /* CHANGED */
+      content: ""; /* CHANGED */
+      position: absolute; /* CHANGED */
+      left: 26px; /* CHANGED */
+      bottom: 10px; /* CHANGED */
+      width: 20px; /* CHANGED */
+      height: 20px; /* CHANGED */
+      background: inherit; /* CHANGED */
+      border-left: 1px solid rgba(93, 64, 55, 0.25); /* CHANGED */
+      border-bottom: 1px solid rgba(93, 64, 55, 0.25); /* CHANGED */
+      transform: rotate(45deg); /* CHANGED */
+    } /* CHANGED */
+
+    .story-text { /* CHANGED */
+      max-width: none; /* CHANGED */
+      margin: 0; /* CHANGED */
+      text-align: left; /* CHANGED */
+      font-size: 1.16rem; /* CHANGED */
+      line-height: 1.52; /* CHANGED */
+      letter-spacing: 0.2px;
+    } /* CHANGED */
+
+    /* =====================================================
+       GAMEPLAY LAYOUT
+    ====================================================== */
+    .gameplay-layout { /* CHANGED */
+      display: grid; /* CHANGED */
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.85fr); /* CHANGED */
+      gap: 26px; /* CHANGED */
+      padding: 12px clamp(18px, 5vw, 70px) 34px; /* CHANGED */
+      align-items: stretch; /* CHANGED */
+      width: 100%; /* CHANGED */
+      box-sizing: border-box; /* CHANGED */
+      min-height: calc(100vh - var(--hud-height)); /* CHANGED */
+    } /* CHANGED */
+
+    .left-pane { /* CHANGED */
+      position: relative; /* CHANGED */
+      overflow: hidden; /* CHANGED */
+      border-radius: 32px; /* CHANGED */
+      height: calc(100vh - var(--hud-height) - 48px); /* CHANGED */
+      min-height: clamp(420px, 68vh, 760px); /* CHANGED */
+      background: #080605; /* CHANGED */
+    } /* CHANGED */
+
+    .right-pane { /* CHANGED */
+      background: rgba(255, 252, 245, 0.95); /* CHANGED */
+      border-radius: 20px; /* CHANGED */
+      padding: 18px 18px 20px; /* CHANGED */
+      border: 1px solid rgba(93, 64, 55, 0.18); /* CHANGED */
+      box-shadow: 0 16px 34px rgba(0,0,0,0.18); /* CHANGED */
+      display: flex; /* CHANGED */
+      flex-direction: column; /* CHANGED */
+      gap: 14px; /* CHANGED */
+      height: calc(100vh - var(--hud-height) - 48px); /* CHANGED */
+      max-height: calc(100vh - var(--hud-height) - 48px); /* CHANGED */
+      overflow: hidden; /* CHANGED */
+    } /* CHANGED */
+
+    /* =====================================================
+       CHOICES
+    ====================================================== */
+    .choices-grid { /* CHANGED */
+      display: grid; /* CHANGED */
+      grid-template-rows: repeat(3, minmax(0, 1fr)); /* CHANGED */
+      gap: 12px; /* CHANGED */
+      width: 100%; /* CHANGED */
+      flex: 1; /* CHANGED */
+    } /* CHANGED */
+
+    .choice-card {
+      background: rgba(255, 252, 245, 0.98);
+      border: 1px solid rgba(215, 204, 200, 0.9); /* CHANGED */
+      border-radius: 14px; /* CHANGED */
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.16); /* CHANGED */
+      min-height: 0; /* CHANGED */
+      height: 100%; /* CHANGED */
+    }
+
+    .choice-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(33,150,243,0.8);
+      box-shadow: 0 16px 36px rgba(33,150,243,0.18);
+    }
+
+    .choice-img-container { /* CHANGED */
+      width: 100%;
+      flex: 0 0 110px; /* CHANGED */
+      background: #efe7d6;
+      position: relative;
+      overflow: hidden;
+      padding: 8px; /* CHANGED */
+    } /* CHANGED */
+
+    .choice-img { /* CHANGED */
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 11px rgba(0,0,0,0.18)); /* CHANGED */
+    } /* CHANGED */
+
+    .choice-label { /* CHANGED */
+      background: rgba(93, 64, 55, 0.94);
+      color: var(--paper-light);
+      padding: 9px 8px; /* CHANGED */
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.92rem; /* CHANGED */
+      letter-spacing: 0.1px; /* CHANGED */
+    } /* CHANGED */
+
+    /* =====================================================
+       TIMER BAR
+    ====================================================== */
+    #timer-bar-container {
+      position: sticky;
+      top: 52px; /* below HUD */
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.18);
+      display: none;
+      z-index: 19;
+    }
+
+    #timer-bar {
+      height: 100%;
+      background: var(--accent-red);
+      width: 100%;
+      transition: width 1s linear;
+    }
+
+    /* =====================================================
+       FLOATING STATS
+    ====================================================== */
+    .floating-text {
+      position: fixed;
+      font-weight: 700;
+      font-size: 1.35rem;
+      pointer-events: none;
+      animation: floatUp 1s ease-out forwards;
+      z-index: 2000;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-54px) scale(1.18); }
+    }
+
+    /* =====================================================
+       START / END SCREENS
+    ====================================================== */
+    .full-screen-page {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1000px 700px at 50% 10%, rgba(255,252,245,0.16), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.18));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 36px;
+      z-index: 60;
+      color: #f6efe2;
+    }
+
+    .full-screen-page.hidden { display: none; }
+
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      margin-bottom: 14px;
+      letter-spacing: 0.4px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      max-width: 760px;
+      margin-bottom: 26px;
+      line-height: 1.65;
+      opacity: 0.95;
+    }
+
+    .start-btn {
+      background: var(--accent-green);
+      color: white;
+      font-size: 1.25rem;
+      padding: 14px 34px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+      transition: transform 0.15s ease;
+    }
+
+    .start-btn:hover { transform: translateY(-2px); }
+
+    /* =====================================================
+       MODAL
+    ====================================================== */
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 30, 26, 0.82);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      padding: 14px;
+    }
+
+    #modal-overlay.active { display: flex; opacity: 1; }
+
+    .modal-card {
+      background: rgba(255, 252, 245, 0.98);
+      width: min(520px, 94vw);
+      border-radius: 22px;
+      padding: 0;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.5);
+      border: 3px solid rgba(93, 64, 55, 0.85);
+      overflow: visible;
+      position: relative;
+    }
+
+    .modal-header {
+      background: rgba(93, 64, 55, 0.95);
+      color: var(--accent-gold);
+      padding: 16px 18px;
+      padding-top: 64px;
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      position: relative;
+    }
+
+    .franklin-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 4px solid var(--accent-gold);
+      background-image: url('assets/ui/ui_franklin_avatar.png');
+      background-size: cover;
+      background-position: center;
+      background-color: #fff;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      position: absolute;
+      top: -34px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .modal-body {
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .feedback-bubble {
+      background: #fff3e0;
+      border-left: 6px solid var(--accent-gold);
+      padding: 14px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      color: #5d4037;
+      text-align: center;
+    }
+
+    .quote-box {
+      font-size: 1.15rem;
+      font-style: italic;
+      text-align: center;
+      color: #3e2723;
+      position: relative;
+      padding: 0 10px;
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 236, 179, 0.9);
+      border: 1px solid rgba(255, 193, 7, 0.6);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 700;
+      color: #5d4037;
+    }
+
+    .badge-pill img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .continue-btn {
+      margin-top: 4px;
+      background: var(--accent-blue);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.2);
+      transition: transform 0.15s ease;
+    }
+
+    .continue-btn:hover { transform: translateY(-1px); }
+
+    /* =====================================================
+       END SCREEN
+    ====================================================== */
+    #end-screen { /* CHANGED */
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.65), transparent 55%), /* CHANGED */
+        linear-gradient(180deg, #fffcf5 0%, #f4e3c9 100%); /* CHANGED */
+      color: var(--text-main); /* CHANGED */
+    } /* CHANGED */
+
+    #end-screen .hero-title, /* CHANGED */
+    #end-screen .hero-subtitle { /* CHANGED */
+      color: var(--text-main); /* CHANGED */
+    } /* CHANGED */
+
+    .end-card {
+      background: rgba(255,252,245,0.92);
+      color: #3e2723;
+      padding: 18px;
+      border-radius: 18px;
+      width: min(720px, 92vw);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      margin-top: 14px;
+    }
+
+    #end-screen .end-card { /* CHANGED */
+      background: #fff8ee; /* CHANGED */
+      border: 1px solid rgba(62,39,35,0.08); /* CHANGED */
+    } /* CHANGED */
+
+    .end-stats {
+      margin-top: 12px;
+      display: grid;
+      gap: 6px; /* CHANGED */
+    }
+
+    #end-screen .end-stats > div { /* CHANGED */
+      padding: 4px 0; /* CHANGED */
+    } /* CHANGED */
+
+    #end-screen .end-stats > div > div:first-child { /* CHANGED */
+      font-size: 0.95rem; /* CHANGED */
+      letter-spacing: 0.3px; /* CHANGED */
+      color: rgba(62,39,35,0.9); /* CHANGED */
+    } /* CHANGED */
+
+    #end-screen .progress-track { /* CHANGED */
+      height: 6px; /* CHANGED */
+      background: rgba(62,39,35,0.1); /* CHANGED */
+      border: none; /* CHANGED */
+    } /* CHANGED */
+
+    #end-screen .progress-fill { /* CHANGED */
+      border-radius: 999px; /* CHANGED */
+    } /* CHANGED */
+
+    .end-badges {
+      margin-top: 18px; /* CHANGED */
+      display: flex;
+      gap: 14px; /* CHANGED */
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 16px 12px; /* CHANGED */
+      background: rgba(255,236,179,0.35); /* CHANGED */
+      border-radius: 16px; /* CHANGED */
+      box-shadow: inset 0 8px 20px rgba(255,255,255,0.3); /* CHANGED */
+    }
+
+    .end-badges img {
+      width: 56px; /* CHANGED */
+      height: 56px; /* CHANGED */
+      object-fit: contain;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.22)); /* CHANGED */
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ====================================================== */
+    @media (max-width: 900px) { /* CHANGED */
+      .gameplay-layout { display: flex; flex-direction: column; padding: 18px 5vw 48px; gap: 28px; min-height: auto; } /* CHANGED */
+      .left-pane { width: 100%; height: auto; min-height: 0; overflow: visible; border-radius: 22px; } /* CHANGED */
+      .scene-header { position: relative; inset: auto; height: clamp(320px, 58vh, 520px); } /* CHANGED */
+      .story-container { position: static; margin-top: 16px; box-shadow: 0 14px 26px rgba(0,0,0,0.25); border-radius: 18px; max-width: none; } /* CHANGED */
+      .story-container::after { display: none; } /* CHANGED */
+      .right-pane { width: 100%; height: auto; max-height: none; min-height: unset; overflow: visible; } /* CHANGED */
+      .choices-grid { display: flex; flex-direction: column; } /* CHANGED */
+      .choice-img-container { flex: 0 0 140px; } /* CHANGED */
+      .stat-group { gap: 10px; } /* CHANGED */
+      .stat-item { min-width: 0; } /* CHANGED */
+      #timer-bar-container { top: 58px; } /* CHANGED */
+    } /* CHANGED */
+
+    @media (max-width: 520px) {
+      #hud { padding: 10px 10px; }
+      .stat-label { font-size: 0.86rem; }
+      .progress-track { height: 10px; }
+      .hud-right { font-size: 0.95rem; }
+      .chapter-title-badge { font-size: 1rem; padding: 9px 16px; }
+    }
+
+    @media (min-width: 1024px) { /* CHANGED */
+      .gameplay-layout { grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.8fr); gap: 34px; } /* CHANGED */
+      .story-text { font-size: 1.18rem; line-height: 1.48; } /* CHANGED */
+      .right-pane { padding: 22px 24px 26px; } /* CHANGED */
+    } /* CHANGED */
+  </style>
+</head>
+<body>
+  <div id="game-container">
+
+    <!-- HUD -->
+    <div id="hud">
+      <div class="stat-group">
+        <div class="stat-item">
+          <div class="stat-label"><span>Wealth</span><span id="val-wealth">10/20</span></div>
+          <div class="progress-track"><div class="progress-fill" id="fill-wealth" style="background: var(--accent-red);"></div></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label"><span>Productivity</span><span id="val-prod">10/20</span></div>
+          <div class="progress-track"><div class="progress-fill" id="fill-prod" style="background: var(--accent-blue);"></div></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label"><span>Wisdom</span><span id="val-wisdom">10/20</span></div>
+          <div class="progress-track"><div class="progress-fill" id="fill-wisdom" style="background: var(--accent-green);"></div></div>
+        </div>
+      </div>
+      <div class="hud-right">Ch <span id="chapter-num">1</span>/5</div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="full-screen-page">
+      <div style="font-size: 3.6rem; margin-bottom: 12px;">📜</div>
+      <h1 class="hero-title">Avoid the Traps of Poverty!</h1>
+      <p class="hero-subtitle">
+        Benjamin Franklin is searching for a young apprentice.<br>
+        Complete 5 daily challenges to earn the title:<br>
+        <strong>"Little Master of Wealth!"</strong>
+      </p>
+      <button class="start-btn" onclick="Game.start()">Start Adventure</button>
+    </div>
+
+    <!-- Main Stage (scrollable) -->
+    <div id="main-stage">
+      <div id="timer-bar-container"><div id="timer-bar"></div></div>
+
+      <div class="gameplay-layout"><!-- CHANGED -->
+        <div class="left-pane"><!-- CHANGED -->
+          <div class="scene-header">
+            <img id="scene-img" class="scene-bg" src="" alt="Scene" />
+            <div class="chapter-title-badge" id="chapter-title">Chapter Title</div>
+          </div>
+
+          <div class="story-container">
+            <p id="story-text" class="story-text"></p>
+          </div>
+        </div>
+
+        <div class="right-pane"><!-- CHANGED -->
+          <div id="choices-area" class="choices-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="franklin-avatar" aria-hidden="true"></div>
+          Challenge Result
+        </div>
+        <div class="modal-body">
+          <div class="feedback-bubble" id="res-feedback">You did well!</div>
+          <div class="quote-box" id="res-quote">"Diligence is the mother of good luck."</div>
+
+          <div id="res-stats-change" style="font-weight:800; color:#1f4e79; text-align:center;"></div>
+
+          <div class="badge-row" id="res-badges"></div>
+
+          <button class="continue-btn" onclick="Game.nextChapter()">Continue Journey ➜</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="end-screen" class="full-screen-page hidden">
+      <div id="end-icon" style="font-size: 4.6rem; margin-bottom: 8px;">🏆</div>
+      <h1 class="hero-title" id="end-title">Ending Title</h1>
+      <p class="hero-subtitle" id="end-msg">Ending Message</p>
+
+      <div class="end-card">
+        <h3 style="font-size: 1.35rem;">Final Score</h3>
+        <div class="end-stats">
+          <div>
+            <div style="display:flex; justify-content:space-between; font-weight:800;">
+              <span>Wealth</span><span id="end-wealth"></span>
+            </div>
+            <div class="progress-track"><div id="end-fill-wealth" class="progress-fill" style="background:var(--accent-red)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-weight:800;">
+              <span>Productivity</span><span id="end-prod"></span>
+            </div>
+            <div class="progress-track"><div id="end-fill-prod" class="progress-fill" style="background:var(--accent-blue)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-weight:800;">
+              <span>Wisdom</span><span id="end-wisdom"></span>
+            </div>
+            <div class="progress-track"><div id="end-fill-wisdom" class="progress-fill" style="background:var(--accent-green)"></div></div>
+          </div>
+        </div>
+
+        <div class="end-badges" id="end-badges"></div>
+      </div>
+
+      <button class="start-btn" style="margin-top: 16px;" onclick="Game.start()">Play Again</button>
+    </div>
+
+  </div>
+
+  <script>
+    /* =====================================================
+       LOCAL ASSETS
+       Place your files like:
+       - assets/scene/scene_ch1_bedroom.png
+       - assets/choice/choice_ch1_alarm_clock.png
+       - assets/ui/ui_badge_morning_warrior.png
+    ====================================================== */
+
+    const BadgeAssets = {
+      "Morning Warrior": "assets/ui/ui_badge_morning_warrior.png",
+      "Smart Saver": "assets/ui/ui_badge_smart_saver.png",
+      "Social Sage": "assets/ui/ui_badge_social_sage.png",
+      "Discipline Hero": "assets/ui/ui_badge_discipline_hero.png",
+      "Master Apprentice": "assets/ui/ui_badge_master_apprentice.png",
+    };
+
+    /**
+     * Game Data (Updated to use local image file paths)
+     */
+    const GameData = [
+      {
+        id: 1,
+        title: "Chapter 1: The Sleeping Trap",
+        text: "It is a beautiful morning. Sunlight streams through your window. What will you do?",
+        sceneImg: "assets/scene/scene_ch1_bedroom.png",
+        sceneFocus: "68% 22%",
+        quote: "\u201cEarly to bed and early to rise makes a man healthy, wealthy, and wise.\u201d",
+        timer: true,
+        choices: [
+          {
+            text: "Wake Up Now",
+            img: "assets/choice/choice_ch1_alarm_clock.png",
+            effects: { prod: 2 },
+            badge: "Morning Warrior",
+          },
+          {
+            text: "Sleep More",
+            img: "assets/choice/choice_ch1_pillow_blanket.png",
+            effects: { prod: -2, wealth: -1 },
+          },
+          {
+            text: "Daydream",
+            img: "assets/choice/choice_ch1_daydream_person.png",
+            effects: { prod: -1 },
+          },
+        ],
+      },
+      {
+        id: 2,
+        title: "Chapter 2: Procrastination",
+        text: "You are at your desk. There is work to be done, but distractions are everywhere.",
+        sceneImg: "assets/scene/scene_ch2_study.png",
+        sceneFocus: "55% 30%",
+        quote: "\u201cYou may delay, but time will not.\u201d",
+        timer: false,
+        choices: [
+          {
+            text: "Do Work",
+            img: "assets/choice/choice_ch2_papers_quill.png",
+            effects: { prod: 2 },
+          },
+          {
+            text: "Make Tea",
+            img: "assets/choice/choice_ch2_teapot.png",
+            effects: { prod: -1 },
+          },
+          {
+            text: "Fly Kite",
+            img: "assets/choice/choice_ch2_kite.png",
+            effects: { prod: -2, wealth: -1 },
+          },
+        ],
+      },
+      {
+        id: 3,
+        title: "Chapter 3: Impulse Buying",
+        text: "In the marketplace, you see a shiny new toy. It looks amazing — but it costs a lot.",
+        sceneImg: "assets/scene/scene_ch3_market.png",
+        sceneFocus: "52% 35%",
+        quote: "\u201cBeware of little expenses; a small leak will sink a great ship.\u201d",
+        timer: false,
+        choices: [
+          {
+            text: "Buy It",
+            img: "assets/choice/choice_ch3_shiny_toy.png",
+            effects: { wealth: -2 },
+          },
+          {
+            text: "Refuse",
+            img: "assets/choice/choice_ch3_stop_hand.png",
+            effects: { wisdom: 1 },
+            badge: "Smart Saver",
+          },
+          {
+            text: "Wishlist",
+            img: "assets/choice/choice_ch3_wishlist_scroll.png",
+            effects: { wisdom: 1 },
+          },
+        ],
+      },
+      {
+        id: 4,
+        title: "Chapter 4: Lending Pressure",
+        text: "A neighbor asks to borrow a large sum of money. They seem worried.",
+        sceneImg: "assets/scene/scene_ch4_neighbor.png",
+        sceneFocus: "58% 30%",
+        quote: "\u201cA borrower is a slave to the lender.\u201d",
+        timer: false,
+        choices: [
+          {
+            text: "Lend All",
+            img: "assets/choice/choice_ch4_coin_bag.png",
+            effects: { wealth: -2 },
+          },
+          {
+            text: "Say No",
+            img: "assets/choice/choice_ch4_closed_door.png",
+            effects: {},
+          },
+          {
+            text: "Small Loan",
+            img: "assets/choice/choice_ch4_handshake_parchment.png",
+            effects: { wealth: -1, wisdom: 1 },
+            badge: "Social Sage",
+          },
+        ],
+      },
+      {
+        id: 5,
+        title: "Chapter 5: Night Temptation",
+        text: "Evening falls. Friends invite you to the tavern, but you have work tomorrow.",
+        sceneImg: "assets/scene/scene_ch5_night.png",
+        sceneFocus: "52% 40%",
+        quote: "\u201cDiligence is the mother of good luck.\u201d",
+        timer: false,
+        choices: [
+          {
+            text: "Party",
+            img: "assets/choice/choice_ch5_tankards.png",
+            effects: { prod: -1, wealth: -2 },
+          },
+          {
+            text: "Go Home",
+            img: "assets/choice/choice_ch5_candle_desk.png",
+            effects: { prod: 2, wisdom: 1 },
+            badge: "Discipline Hero",
+          },
+          {
+            text: "Short Visit",
+            img: "assets/choice/choice_ch5_hourglass.png",
+            effects: { prod: -1, wealth: -1 },
+          },
+        ],
+      },
+    ];
+
+    const Game = {
+      state: {
+        idx: 0,
+        stats: { wealth: 10, prod: 10, wisdom: 10 },
+        maxStat: 20,
+        badges: [],
+        startTime: 0,
+        timerActive: false,
+      },
+
+      els: {
+        hud: {
+          vals: {
+            wealth: document.getElementById("val-wealth"),
+            prod: document.getElementById("val-prod"),
+            wisdom: document.getElementById("val-wisdom"),
+          },
+          fills: {
+            wealth: document.getElementById("fill-wealth"),
+            prod: document.getElementById("fill-prod"),
+            wisdom: document.getElementById("fill-wisdom"),
+          },
+          chapter: document.getElementById("chapter-num"),
+        },
+        screens: {
+          start: document.getElementById("start-screen"),
+          end: document.getElementById("end-screen"),
+          modal: document.getElementById("modal-overlay"),
+        },
+        stage: {
+          main: document.getElementById("main-stage"),
+          title: document.getElementById("chapter-title"),
+          img: document.getElementById("scene-img"),
+          text: document.getElementById("story-text"),
+          choices: document.getElementById("choices-area"),
+          timerBar: document.getElementById("timer-bar-container"),
+          timerFill: document.getElementById("timer-bar"),
+        },
+        modal: {
+          feedback: document.getElementById("res-feedback"),
+          quote: document.getElementById("res-quote"),
+          stats: document.getElementById("res-stats-change"),
+          badges: document.getElementById("res-badges"),
+        },
+      },
+
+      start() {
+        this.state = {
+          idx: 0,
+          stats: { wealth: 10, prod: 10, wisdom: 10 },
+          maxStat: 20,
+          badges: [],
+          startTime: 0,
+          timerActive: false,
+        };
+
+        this.els.screens.start.classList.add("hidden");
+        this.els.screens.end.classList.add("hidden");
+        this.els.screens.modal.classList.remove("active");
+
+        this.updateHUD();
+        this.loadChapter(0);
+      },
+
+      loadChapter(idx) {
+        if (idx >= GameData.length) {
+          this.endGame();
+          return;
+        }
+
+        const data = GameData[idx];
+        this.els.hud.chapter.innerText = String(idx + 1);
+
+        // Scene
+        this.els.stage.title.innerText = data.title;
+        this.els.stage.img.src = data.sceneImg;
+        this.els.stage.img.style.objectPosition = data.sceneFocus || "50% 50%";
+
+        // Typewriter
+        this.els.stage.text.innerHTML = "";
+        this.typeWriter(data.text, this.els.stage.text);
+
+        // Choices
+        this.els.stage.choices.innerHTML = "";
+        data.choices.forEach((c, i) => {
+          const card = document.createElement("div");
+          card.className = "choice-card";
+          card.innerHTML = `
+            <div class="choice-img-container">
+              <img src="${c.img}" class="choice-img" alt="${c.text}" loading="lazy" />
+            </div>
+            <div class="choice-label">${c.text}</div>
+          `;
+          card.onclick = (e) => this.handleChoice(i, e);
+          this.els.stage.choices.appendChild(card);
+        });
+
+        // Timer (Ch1)
+        if (data.timer) {
+          this.state.startTime = Date.now();
+          this.state.timerActive = true;
+          this.els.stage.timerBar.style.display = "block";
+          this.els.stage.timerFill.style.width = "100%";
+          setTimeout(() => { this.els.stage.timerFill.style.width = "0%"; }, 100);
+        } else {
+          this.state.timerActive = false;
+          this.els.stage.timerBar.style.display = "none";
+        }
+
+        // Reset scroll positions after render for desktop + mobile harmony /* CHANGED */
+        requestAnimationFrame(() => { /* CHANGED */
+          this.els.stage.main.scrollTop = 0; /* CHANGED */
+          window.scrollTo({ top: 0, behavior: "smooth" }); /* CHANGED */
+        }); /* CHANGED */
+      },
+
+      typeWriter(text, element) {
+        let i = 0;
+        const speed = 18;
+        element.innerHTML = "";
+        const type = () => {
+          if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+          }
+        };
+        type();
+      },
+
+      handleChoice(choiceIdx, event) {
+        const data = GameData[this.state.idx];
+        const choice = data.choices[choiceIdx];
+
+        let effects = { ...choice.effects };
+        let feedback = "";
+
+        // Speed bonus for Ch1 Wake Up Now
+        if (this.state.idx === 0 && choiceIdx === 0) {
+          const timeDiff = Date.now() - this.state.startTime;
+          if (timeDiff < 4000) {
+            effects.wealth = (effects.wealth || 0) + 1;
+            feedback = "⚡ Quick thinking! (+1 Wealth) ";
+          }
+        }
+
+        // Random event for Ch3
+        if (this.state.idx === 2 && Math.random() > 0.7) {
+          effects.wealth = (effects.wealth || 0) - 1;
+          feedback += "💸 A sudden sale tempted you to spend more. ";
+        }
+
+        // Apply stats + floating text
+        this.applyStats(effects, event);
+
+        // Badge
+        let earnedBadge = null;
+        if (choice.badge) {
+          earnedBadge = choice.badge;
+          this.state.badges.push(choice.badge);
+        }
+
+        // Modal content
+        this.els.modal.feedback.innerText = `You chose: ${choice.text}. ` + feedback;
+        this.els.modal.quote.innerText = data.quote;
+
+        // Stats changes display
+        let statHtml = "";
+        if (effects.wealth) statHtml += `<span>💰 ${effects.wealth > 0 ? "+" : ""}${effects.wealth}</span> `;
+        if (effects.prod) statHtml += `<span>⚡ ${effects.prod > 0 ? "+" : ""}${effects.prod}</span> `;
+        if (effects.wisdom) statHtml += `<span>🦉 ${effects.wisdom > 0 ? "+" : ""}${effects.wisdom}</span> `;
+        this.els.modal.stats.innerHTML = statHtml || "No significant change.";
+
+        // Badge row
+        this.els.modal.badges.innerHTML = "";
+        if (earnedBadge) {
+          const badgeImg = BadgeAssets[earnedBadge];
+          if (badgeImg) {
+            const pill = document.createElement("div");
+            pill.className = "badge-pill";
+            pill.innerHTML = `<img src="${badgeImg}" alt="${earnedBadge}" /><span>Badge: ${earnedBadge}</span>`;
+            this.els.modal.badges.appendChild(pill);
+          }
+        }
+
+        // Open Modal
+        setTimeout(() => {
+          this.els.screens.modal.classList.add("active");
+        }, 300);
+      },
+
+      applyStats(effects, event) {
+        const clamp = (v) => Math.max(0, Math.min(this.state.maxStat, v));
+
+        if (effects.wealth) this.state.stats.wealth = clamp(this.state.stats.wealth + effects.wealth);
+        if (effects.prod) this.state.stats.prod = clamp(this.state.stats.prod + effects.prod);
+        if (effects.wisdom) this.state.stats.wisdom = clamp(this.state.stats.wisdom + effects.wisdom);
+
+        this.updateHUD();
+
+        // Floating text (fixed positioning for consistent UX)
+        if (event) {
+          const card = event.target.closest('.choice-card');
+          if (!card) return;
+          const rect = card.getBoundingClientRect();
+          const startX = rect.left + rect.width / 2;
+          const startY = rect.top + 24;
+
+          Object.entries(effects).forEach(([key, val], i) => {
+            if (!val) return;
+            const floatEl = document.createElement('div');
+            floatEl.className = 'floating-text';
+            const icon = key === 'wealth' ? '💰' : (key === 'prod' ? '⚡' : '🦉');
+            floatEl.innerText = `${icon} ${val > 0 ? '+' : ''}${val}`;
+            floatEl.style.color = val > 0 ? '#2e7d32' : '#c62828';
+            floatEl.style.left = (startX + (i * 18) - 18) + 'px';
+            floatEl.style.top = (startY + (i * 6)) + 'px';
+            document.body.appendChild(floatEl);
+            setTimeout(() => floatEl.remove(), 1000);
+          });
+        }
+      },
+
+      updateHUD() {
+        const s = this.state.stats;
+        const m = this.state.maxStat;
+
+        this.els.hud.vals.wealth.innerText = `${s.wealth}/${m}`;
+        this.els.hud.vals.prod.innerText = `${s.prod}/${m}`;
+        this.els.hud.vals.wisdom.innerText = `${s.wisdom}/${m}`;
+
+        this.els.hud.fills.wealth.style.width = `${(s.wealth / m) * 100}%`;
+        this.els.hud.fills.prod.style.width = `${(s.prod / m) * 100}%`;
+        this.els.hud.fills.wisdom.style.width = `${(s.wisdom / m) * 100}%`;
+      },
+
+      nextChapter() {
+        this.els.screens.modal.classList.remove("active");
+        this.state.idx++;
+        this.loadChapter(this.state.idx);
+      },
+
+      endGame() {
+        this.els.screens.end.classList.remove("hidden");
+
+        const s = this.state.stats;
+        const total = s.wealth + s.prod + s.wisdom;
+        const m = this.state.maxStat;
+
+        document.getElementById("end-wealth").innerText = String(s.wealth);
+        document.getElementById("end-prod").innerText = String(s.prod);
+        document.getElementById("end-wisdom").innerText = String(s.wisdom);
+
+        document.getElementById("end-fill-wealth").style.width = `${(s.wealth / m) * 100}%`;
+        document.getElementById("end-fill-prod").style.width = `${(s.prod / m) * 100}%`;
+        document.getElementById("end-fill-wisdom").style.width = `${(s.wisdom / m) * 100}%`;
+
+        // Badges (dedupe)
+        const uniqueBadges = Array.from(new Set(this.state.badges));
+
+        // If player did very well, add a final mastery badge
+        if (total >= 45 && !uniqueBadges.includes("Master Apprentice")) {
+          uniqueBadges.push("Master Apprentice");
+        }
+
+        const badgeContainer = document.getElementById("end-badges");
+        badgeContainer.innerHTML = "";
+        if (uniqueBadges.length === 0) {
+          badgeContainer.innerHTML = "<div style='opacity:0.85; font-weight:800;'>No badges earned</div>";
+        } else {
+          uniqueBadges.forEach((b) => {
+            const src = BadgeAssets[b];
+            if (!src) return;
+            const img = document.createElement("img");
+            img.src = src;
+            img.alt = b;
+            img.title = b;
+            badgeContainer.appendChild(img);
+          });
+        }
+
+        // Ending text
+        const titleEl = document.getElementById("end-title");
+        const msgEl = document.getElementById("end-msg");
+        const iconEl = document.getElementById("end-icon");
+
+        if (total >= 45) {
+          titleEl.innerText = "Legendary Tycoon!";
+          msgEl.innerText = "Amazing! Franklin is proud. Your habits today can shape your wealth tomorrow.";
+          iconEl.innerText = "👑";
+        } else if (total >= 35) {
+          titleEl.innerText = "Survival Master";
+          msgEl.innerText = "Nice work! You avoided most traps. Try again and collect more badges!";
+          iconEl.innerText = "🌿";
+        } else {
+          titleEl.innerText = "Keep Trying";
+          msgEl.innerText = "Mistakes are part of learning. Play again and test new choices!";
+          iconEl.innerText = "🍂";
+        }
+      },
+    };
+
+    // Optional: close modal by clicking outside
+    document.getElementById('modal-overlay').addEventListener('click', (e) => {
+      if (e.target.id === 'modal-overlay') {
+        Game.els.screens.modal.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
