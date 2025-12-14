@@ -32,6 +32,8 @@
       overflow: hidden; /* we'll scroll inside #main-stage */
     }
 
+    .hud-hidden #hud { display: none; } /* CHANGED */
+
     /* =====================================================
        FULL-PAGE STAGE (Removed wooden frame)
     ====================================================== */
@@ -108,15 +110,13 @@
     /* =====================================================
        MAIN STAGE (Scroll container)
     ====================================================== */
-    #main-stage {
+    #main-stage { /* CHANGED */
       flex: 1;
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
-      background:
-        radial-gradient(1200px 700px at 50% -10%, rgba(255,252,245,0.14), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.12));
-    }
+      background: linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.12)); /* CHANGED */
+    } /* CHANGED */
 
     /* =====================================================
        HERO SCENE
@@ -173,18 +173,7 @@
       z-index: 6; /* CHANGED */
     } /* CHANGED */
 
-    .story-container::after { /* CHANGED */
-      content: ""; /* CHANGED */
-      position: absolute; /* CHANGED */
-      left: 26px; /* CHANGED */
-      bottom: 10px; /* CHANGED */
-      width: 20px; /* CHANGED */
-      height: 20px; /* CHANGED */
-      background: inherit; /* CHANGED */
-      border-left: 1px solid rgba(93, 64, 55, 0.25); /* CHANGED */
-      border-bottom: 1px solid rgba(93, 64, 55, 0.25); /* CHANGED */
-      transform: rotate(45deg); /* CHANGED */
-    } /* CHANGED */
+    .story-container::after { content: none; } /* CHANGED */
 
     .story-text { /* CHANGED */
       max-width: none; /* CHANGED */
@@ -237,10 +226,11 @@
     ====================================================== */
     .choices-grid { /* CHANGED */
       display: grid; /* CHANGED */
-      grid-template-rows: repeat(3, minmax(0, 1fr)); /* CHANGED */
+      grid-template-rows: repeat(3, auto); /* CHANGED */
       gap: 12px; /* CHANGED */
       width: 100%; /* CHANGED */
       flex: 1; /* CHANGED */
+      align-content: start; /* CHANGED */
     } /* CHANGED */
 
     .choice-card {
@@ -255,7 +245,7 @@
       flex-direction: column;
       box-shadow: 0 10px 22px rgba(0,0,0,0.16); /* CHANGED */
       min-height: 0; /* CHANGED */
-      height: 100%; /* CHANGED */
+      height: auto; /* CHANGED */
     }
 
     .choice-card:hover {
@@ -293,23 +283,8 @@
     /* =====================================================
        TIMER BAR
     ====================================================== */
-    #timer-bar-container {
-      position: sticky;
-      top: 52px; /* below HUD */
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: rgba(255,255,255,0.18);
-      display: none;
-      z-index: 19;
-    }
-
-    #timer-bar {
-      height: 100%;
-      background: var(--accent-red);
-      width: 100%;
-      transition: width 1s linear;
-    }
+    #timer-bar-container { display: none !important; }
+    #timer-bar { display: none !important; }
 
     /* =====================================================
        FLOATING STATS
@@ -332,12 +307,12 @@
     /* =====================================================
        START / END SCREENS
     ====================================================== */
-    .full-screen-page {
+    .full-screen-page { /* CHANGED */
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(1000px 700px at 50% 10%, rgba(255,252,245,0.16), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.18));
+        radial-gradient(1000px 700px at 50% 10%, rgba(255,252,245,0.25), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.95));
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -346,7 +321,13 @@
       padding: 36px;
       z-index: 60;
       color: #f6efe2;
-    }
+    } /* CHANGED */
+
+    #start-screen { /* CHANGED */
+      z-index: 2000;
+      background: none; /* CHANGED */
+      background-color: #2f2018; /* CHANGED */
+    } /* CHANGED */
 
     .full-screen-page.hidden { display: none; }
 
@@ -514,24 +495,23 @@
        END SCREEN
     ====================================================== */
     #end-screen { /* CHANGED */
-      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.65), transparent 55%), /* CHANGED */
-        linear-gradient(180deg, #fffcf5 0%, #f4e3c9 100%); /* CHANGED */
-      color: var(--text-main); /* CHANGED */
+      background: linear-gradient(150deg, #3a251c 0%, #2f2018 55%, #241710 100%); /* CHANGED */
+      color: #fff7ed; /* CHANGED */
     } /* CHANGED */
 
     #end-screen .hero-title, /* CHANGED */
     #end-screen .hero-subtitle { /* CHANGED */
-      color: var(--text-main); /* CHANGED */
+      color: #fff9f0; /* CHANGED */
     } /* CHANGED */
 
     .end-card {
-      background: rgba(255,252,245,0.92);
+      background: rgba(255,252,245,0.95); /* CHANGED */
       color: #3e2723;
-      padding: 18px;
+      padding: 20px; /* CHANGED */
       border-radius: 18px;
       width: min(720px, 92vw);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-      margin-top: 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35); /* CHANGED */
+      margin-top: 18px; /* CHANGED */
     }
 
     #end-screen .end-card { /* CHANGED */
@@ -542,17 +522,24 @@
     .end-stats {
       margin-top: 12px;
       display: grid;
-      gap: 6px; /* CHANGED */
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); /* CHANGED */
+      gap: 12px 18px; /* CHANGED */
+      width: 100%; /* CHANGED */
     }
 
     #end-screen .end-stats > div { /* CHANGED */
-      padding: 4px 0; /* CHANGED */
+      padding: 10px 12px; /* CHANGED */
+      background: rgba(255, 248, 238, 0.9); /* CHANGED */
+      border-radius: 14px; /* CHANGED */
+      border: 1px solid rgba(62,39,35,0.12); /* CHANGED */
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5); /* CHANGED */
     } /* CHANGED */
 
     #end-screen .end-stats > div > div:first-child { /* CHANGED */
       font-size: 0.95rem; /* CHANGED */
       letter-spacing: 0.3px; /* CHANGED */
       color: rgba(62,39,35,0.9); /* CHANGED */
+      margin-bottom: 6px; /* CHANGED */
     } /* CHANGED */
 
     #end-screen .progress-track { /* CHANGED */
@@ -565,24 +552,52 @@
       border-radius: 999px; /* CHANGED */
     } /* CHANGED */
 
+    .badge-section { /* CHANGED */
+      margin-top: 26px; /* CHANGED */
+      width: 100%; /* CHANGED */
+      background: rgba(255,238,207,0.6); /* CHANGED */
+      border: 1px solid rgba(62,39,35,0.15); /* CHANGED */
+      border-radius: 18px; /* CHANGED */
+      padding: 18px 16px 22px; /* CHANGED */
+      box-shadow: inset 0 3px 8px rgba(255,255,255,0.4); /* CHANGED */
+    } /* CHANGED */
+
+    .badge-section h4 { /* CHANGED */
+      text-transform: uppercase; /* CHANGED */
+      letter-spacing: 1.5px; /* CHANGED */
+      font-size: 0.95rem; /* CHANGED */
+      color: rgba(62,39,35,0.85); /* CHANGED */
+      margin-bottom: 12px; /* CHANGED */
+    } /* CHANGED */
+
     .end-badges {
-      margin-top: 18px; /* CHANGED */
       display: flex;
-      gap: 14px; /* CHANGED */
+      gap: 20px; /* CHANGED */
       justify-content: center;
       flex-wrap: wrap;
-      padding: 16px 12px; /* CHANGED */
-      background: rgba(255,236,179,0.35); /* CHANGED */
-      border-radius: 16px; /* CHANGED */
-      box-shadow: inset 0 8px 20px rgba(255,255,255,0.3); /* CHANGED */
     }
 
-    .end-badges img {
-      width: 56px; /* CHANGED */
-      height: 56px; /* CHANGED */
-      object-fit: contain;
-      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.22)); /* CHANGED */
-    }
+    .end-badge-item { /* CHANGED */
+      display: flex; /* CHANGED */
+      flex-direction: column; /* CHANGED */
+      align-items: center; /* CHANGED */
+      gap: 12px; /* CHANGED */
+      min-width: 140px; /* CHANGED */
+    } /* CHANGED */
+
+    .end-badge-item img { /* CHANGED */
+      width: 100px; /* CHANGED */
+      height: 100px; /* CHANGED */
+      object-fit: contain; /* CHANGED */
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,0.25)); /* CHANGED */
+    } /* CHANGED */
+
+    .end-badge-name { /* CHANGED */
+      font-weight: 700; /* CHANGED */
+      text-align: center; /* CHANGED */
+      font-size: 1rem; /* CHANGED */
+      color: #3e2723; /* CHANGED */
+    } /* CHANGED */
 
     /* =====================================================
        RESPONSIVE
@@ -616,7 +631,7 @@
     } /* CHANGED */
   </style>
 </head>
-<body>
+<body class="hud-hidden"><!-- CHANGED -->
   <div id="game-container">
 
     <!-- HUD -->
@@ -721,10 +736,13 @@
           </div>
         </div>
 
-        <div class="end-badges" id="end-badges"></div>
+        <div class="badge-section">
+          <h4>Badges Earned</h4>
+          <div class="end-badges" id="end-badges"></div>
+        </div>
       </div>
 
-      <button class="start-btn" style="margin-top: 16px;" onclick="Game.start()">Play Again</button>
+      <button class="start-btn" style="margin-top: 16px;" onclick="Game.returnToLanding()">Play Again</button><!-- CHANGED -->
     </div>
 
   </div>
@@ -896,6 +914,17 @@
         timerActive: false,
       },
 
+      resetStateValues() { // CHANGED
+        this.state = { // CHANGED
+          idx: 0, // CHANGED
+          stats: { wealth: 10, prod: 10, wisdom: 10 }, // CHANGED
+          maxStat: 20, // CHANGED
+          badges: [], // CHANGED
+          startTime: 0, // CHANGED
+          timerActive: false, // CHANGED
+        }; // CHANGED
+      }, // CHANGED
+
       els: {
         hud: {
           vals: {
@@ -933,22 +962,32 @@
       },
 
       start() {
-        this.state = {
-          idx: 0,
-          stats: { wealth: 10, prod: 10, wisdom: 10 },
-          maxStat: 20,
-          badges: [],
-          startTime: 0,
-          timerActive: false,
-        };
+        this.resetStateValues(); // CHANGED
 
         this.els.screens.start.classList.add("hidden");
         this.els.screens.end.classList.add("hidden");
         this.els.screens.modal.classList.remove("active");
+        document.body.classList.remove("hud-hidden"); // CHANGED
 
         this.updateHUD();
         this.loadChapter(0);
       },
+
+      returnToLanding() { // CHANGED
+        this.resetStateValues(); // CHANGED
+        this.updateHUD(); // CHANGED
+        this.els.hud.chapter.innerText = "1"; // CHANGED
+        this.els.screens.start.classList.remove("hidden"); // CHANGED
+        this.els.screens.end.classList.add("hidden"); // CHANGED
+        this.els.screens.modal.classList.remove("active"); // CHANGED
+        document.body.classList.add("hud-hidden"); // CHANGED
+        this.state.timerActive = false; // CHANGED
+        this.els.stage.timerBar.style.display = "none"; // CHANGED
+        this.els.stage.choices.innerHTML = ""; // CHANGED
+        this.els.stage.text.innerHTML = ""; // CHANGED
+        this.els.stage.img.src = ""; // CHANGED
+        this.els.stage.main.scrollTop = 0; // CHANGED
+      }, // CHANGED
 
       loadChapter(idx) {
         if (idx >= GameData.length) {
@@ -1159,11 +1198,18 @@
           uniqueBadges.forEach((b) => {
             const src = BadgeAssets[b];
             if (!src) return;
-            const img = document.createElement("img");
-            img.src = src;
-            img.alt = b;
-            img.title = b;
-            badgeContainer.appendChild(img);
+            const badgeWrap = document.createElement("div"); // CHANGED
+            badgeWrap.className = "end-badge-item"; // CHANGED
+            const img = document.createElement("img"); // CHANGED
+            img.src = src; // CHANGED
+            img.alt = b; // CHANGED
+            img.title = b; // CHANGED
+            const label = document.createElement("div"); // CHANGED
+            label.className = "end-badge-name"; // CHANGED
+            label.innerText = b; // CHANGED
+            badgeWrap.appendChild(img); // CHANGED
+            badgeWrap.appendChild(label); // CHANGED
+            badgeContainer.appendChild(badgeWrap); // CHANGED
           });
         }
 
@@ -1193,6 +1239,10 @@
       if (e.target.id === 'modal-overlay') {
         Game.els.screens.modal.classList.remove('active');
       }
+    });
+
+    window.addEventListener('load', () => {
+      Game.returnToLanding();
     });
   </script>
 </body>
